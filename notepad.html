@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>AutoNotepad</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <style>
+            body {
+                background-color: black;
+                color: gray;
+                height: 100%;
+            }
+
+            html {
+                height: 95%;
+            }
+
+            hr {
+                border: 1px solid;
+            }
+
+            pre {
+                background-color: rgba(20,20,20,128);
+            }
+
+            button, input {
+                background: #101010;
+                color: #404040;
+                border: none;
+                height: 24px;
+                font-size: 13pt !important;
+                margin: 0;
+            }
+
+            .content {
+                height: 100%;
+            }
+
+            .content:focus {
+                outline: none;
+            }
+
+            .right {
+                float: right;
+            }
+        </style>
+        <script>
+
+            var promptTexts = {
+                "fontSize": "Type a font size from 1-7 (3 is default, 7 is largest)",
+                "insertHTML": "Type HTML to insert (e.g youtube iframe)",
+                "fontName": "Type a font name"
+            }
+            window.addEventListener('unload', function() {
+                window.localStorage.setItem('content', document.querySelector(".content").innerHTML);
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+                document.execCommand("styleWithCSS", true, true);
+                document.execCommand("enableInlineTableEditing", true, true);
+                document.execCommand("enableObjectResizing", true, true);
+                //, true, false);
+                if (window.localStorage.getItem('content') != null) {
+                    document.querySelector(".content").innerHTML = window.localStorage.getItem('content');
+                }
+                for (button of document.querySelectorAll("button")) {
+                    if (button.id == "hiliteColor" || button.id == "foreColor") {
+                        button.addEventListener("click", function(e) {
+                            // quick and dirty native color picker
+                            var c = document.createElement("input");
+                            c.type = "color";
+                            c.click();
+                            document.execCommand("styleWithCSS", true, true);
+                            c.addEventListener("change", function() {
+                                document.execCommand(e.target.id, true, c.value);
+                                document.execCommand("styleWithCSS", true, false);
+                            })
+
+                        });
+                    } else if (button.id in promptTexts) {
+                        button.addEventListener("click", function(e) {
+                            // string picker with prompt()
+                            document.execCommand(e.target.id, true, prompt(promptTexts[e.target.id]))
+                        });
+                    } else {
+                        // simple actions e.g bold
+                        // also a hack for formatBlock is here but <pre> is actually bugged so it isnt used
+                        button.addEventListener("click", function(e) {
+                            document.execCommand(e.target.id, true, "pre");
+                        });
+                    }
+                }
+
+                //image dnd
+                dropbox = document.querySelector(".content");
+                dropbox.addEventListener("dragenter", dragenter, false);
+                dropbox.addEventListener("dragover", dragover, false);
+                dropbox.addEventListener("drop", drop, false);
+
+                function dragenter(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+
+                function dragover(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                }
+
+                function handleFiles(files) {
+                    for (var i = 0; i < files.length; i++) {
+                        var file = files[i];
+                        var imageType = /^image\//;
+
+                        if (!imageType.test(file.type)) {
+                            continue;
+                        }
+
+                        var img = document.createElement("img");
+                        img.classList.add("obj");
+                        img.file = file;
+                        document.querySelector(".content").appendChild(img);
+
+                        var reader = new FileReader();
+                        reader.onload = (function(aImg) {
+                            return function(e) {
+                                aImg.src = e.target.result;
+                            }
+                            ;
+                        }
+                        )(img);
+                        reader.readAsDataURL(file);
+                    }
+                }
+
+                function drop(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    var dt = e.dataTransfer;
+                    var files = dt.files;
+
+                    handleFiles(files);
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <span class="tools">
+            <button id="bold" class="material-icons">format_bold
+            </button>
+            <button id="italic" class="material-icons">format_italic
+            </button>
+            <button id="underline" class="material-icons">format_underline
+            </button>
+            <button id="strikeThrough" class="material-icons">strikethrough_s
+            </button>
+            <!--
+            <button id="subscript" class="material-icons"><sub>text_format</sub>
+            </button>
+            <button id="superscript" class="material-icons">sup
+            </button>-->
+            <button id="insertHorizontalRule" class="material-icons">remove
+            </button>
+            <button id="hiliteColor" class="material-icons">format_color_fill
+            </button>
+            <button id="foreColor" class="material-icons">format_color_text
+            </button>
+            <button id="fontName" class="material-icons">title
+            </button>
+            <button id="removeFormat" class="material-icons">format_clear
+            </button>
+            <button id="indent" class="material-icons">format_indent_increase
+            </button>
+            <button id="outdent" class="material-icons">format_indent_decrease
+            </button>
+            <button id="fontSize" class="material-icons">format_size
+            </button>
+            <button id="insertHTML" class="material-icons">code
+            </button>
+            <button id="insertOrderedList" class="material-icons">format_list_numbered
+            </button>
+            <button id="insertUnorderedList" class="material-icons">format_list_bulleted
+            </button>
+            <button id="justifyLeft" class="material-icons">format_align_left
+            </button>
+            <button id="justifyCenter" class="material-icons">format_align_center
+            </button>
+            <button id="justifyRight" class="material-icons">format_align_right
+            </button>
+            <button id="justifyFull" class="material-icons">format_align_justify
+            </button>
+        </span>
+        <div class="content" contenteditable="true">
+            Welcome to AutoNotepad!
+            This is a completely local based app and no data is sent to any servers.
+            Here's some tips:
+
+            <ul>
+                <li>Changes are saved automatically.</li>
+                <li>You can use common editor keyboard shortcuts such as Ctrl+Z or Ctrl+B.</li>
+                <li>You can drag in images from other browser tabs or your computer. Note that you can't resize images in Chrome and Edge but you can in other browsers such as Firefox.</li>
+                <li>Use the code button on the toolbar to embed YouTube videos.</li>
+            </ul>
+        </div>
+    </body>
+</html>
