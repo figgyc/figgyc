@@ -2,7 +2,8 @@
 
 <body style="font-family: sans-serif"></body>
 <script>
-    document.body.innerText = "Type '/linkdiscord " + window.location.hash.match("#access_token=([a-zA-Z0-9]*)&") + "' to finish linking"
+    let token = window.location.hash.match("#access_token=([a-zA-Z0-9]*)&")[1]
+    document.body.innerHTML = "Type <pre><code>/linkdiscord " + token + "</code></pre> to finish linking"
 </script>
 
 </html>
