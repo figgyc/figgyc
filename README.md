@@ -8,6 +8,9 @@ Written in vanilla client-side JavaScript, [Voter.js](https://figgyc.uk/voterjs)
 
 Usage exceeds 1500 users a week, and it is widely regarded as a useful tool, generally succeeding the original "voter.exe" project by being cross-platform and including more features such as automatic assembly of the final vote keyword (in TWOWs, responses are mapped to letters and an entire vote can be represented by a list of the characters from best to worst). It has been continuously updated with bug fixes and with additional features, such as keyboard shortcuts, grouping similar responses into sublists to save comparison time, and more.
 
+## [`figgyc/bracketcounter`](https://github.com/figgyc/bracketcounter)
+Using TypeScript and a custom high-performance asynchronous interface to the YouTube API, [Bracketcounter](https://bfb.figgyc.uk)
+
 # Historical projects
 
 ## [`figgyc/seedhelper2`](https://github.com/figgyc/seedhelper2) (July 2018)
