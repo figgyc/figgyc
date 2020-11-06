@@ -1,5 +1,3 @@
-{% include accordion.html %}
-
 # Hello!
 It's George, or figgyc as I go by on most of the internet. Currently I'm studying at a sixth form college in the UK but in my spare time I work on various side projects for online communities I participate in and other stuff.
 
