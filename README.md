@@ -17,10 +17,10 @@ Using TypeScript and a custom high-performance asynchronous interface to the You
 ---
 <details>
 <summary>
-# Historical projects
+<h2>Historical projects</h2>
 </summary>
-## [`figgyc/seedhelper2`](https://github.com/figgyc/seedhelper2) (March-July 2018)
-Written in Go, Python, JavaScript and a small bit of C, Seedhelper was a open source tool designed for the 3DS homebrew community. Augmenting the [seedminer](https://github.com/zoogie/seedminer) exploit written by zoogie, the website replaced a complicated system of forum threads, tireless volunteers and manual labour with a simple automated process. Using a custom written on-device program, it automatically interfaced with the friends system to extract key data, which could be combined with the exploit and a Python script on volunteer computers to automatically brute force the latter part of the process. This greatly increased the efficiency and over 30000 users were served by Seedhelper during its lifetime.
-
-Unfortunately due to a large volume of traffic driven by YouTube tutorials among other sources, the website had an error in July 2018 and despite my efforts it never recovered. (Still haven't figured out why to this day, maybe I could do a post mortem at some point to improve my Go knowledge.) It was succeeded by [BruteforceMovable](https://bruteforcemovable.com/) which reuses a large portion of the client-side and miner automation code with a different PHP-based backend, although today the 3DS scene largely relies upon simpler exploits revealed following the system's end-of-life."
+<h2><a href="https://github.com/figgyc/seedhelper2"><code>figgyc/seedhelper2</code></a> (March-July 2018)</h2><p>
+Written in Go, Python, JavaScript and a small bit of C, Seedhelper was a open source tool designed for the 3DS homebrew community. Augmenting the seedminer program written by zoogie, the website replaced a complicated system of forum threads, tireless volunteers and manual labour with a simple automated process. Using a custom written on-device program, it automatically interfaced with the friends system to extract key data, which could be combined with the seedminer and a Python script on volunteer computers to automatically brute force the latter part of the process. This greatly increased the efficiency and over 30000 users were served by Seedhelper during its lifetime.
+</p><p>
+Unfortunately due to a large volume of traffic driven by YouTube tutorials among other sources, the website had an error in July 2018 and despite my efforts it never recovered. (Still haven't figured out why to this day, maybe I could do a post mortem at some point to improve my Go knowledge.) It was succeeded by BruteforceMovable which reuses a large portion of the client-side and miner automation code with a different PHP-based backend, although today the 3DS scene largely relies upon simpler exploits revealed following the system's end-of-life."</p>
 </details>
