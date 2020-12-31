@@ -1,4 +1,4 @@
-#+TITLE: figgyc's blog
+#+hugo_base_dir: .
 #+hugo_section: blog
 
 * About
