@@ -2,9 +2,16 @@
 #+hugo_section: blog
 #+TITLE: figgyc's blog
 
-* About
+* Home
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: /
 :EXPORT_FILE_NAME: _index
 :END:
 Hello there.
+
+* OpenWRT :@openwrt:
+** TODO How to use OpenWRT on the Creality WB-01
+:PROPERTIES:
+:EXPORT_FILE_NAME: openwrt-wb01
+:END:
+A while ago, I discovered a cool little gadget called the
