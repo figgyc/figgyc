@@ -1,6 +1,0 @@
-#+title: Hello
-#+date: 2020-12-31T16:23:06Z
-#+draft: true
-
-* Hi there!
-This is a test post
