@@ -1,6 +1,6 @@
 #+hugo_base_dir: .
 #+hugo_section: blog
-#+TITLE: figgyc's blog
+#+TITLE: figgyc
 
 * Home
 :PROPERTIES:
@@ -10,8 +10,6 @@
 Hello there.
 
 * OpenWRT :@openwrt:
-** TODO How to use OpenWRT on the Creality WB-01
-:PROPERTIES:
-:EXPORT_FILE_NAME: openwrt-wb01
-:END:
-A while ago, I discovered a cool little gadget called the
+** TODO How to use OpenWRT on the Creality Wifi Box WB-01
+A while ago, I discovered a cool little gadget called the Creality Box... or is it the Creality Wifi Box? Both of those names are pretty silly to be honest, so I use the model number you can find on the back of the label - the Creality WB-01.
+You might have seen the [[https://www.youtube.com/watch?v=SBr0ArgDztc&t=687s][Teaching Tech video]], or one of the [[https://hackaday.com/2020/12/13/creality-wifi-takes-on-octoprint/][Hackaday]] [[https://hackaday.com/2020/12/28/teardown-creality-wifi-box][articles]]
