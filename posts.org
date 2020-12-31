@@ -1,0 +1,8 @@
+#+TITLE: figgyc's blog
+#+hugo_section: blog
+
+* About
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:END:
+Hello there.
