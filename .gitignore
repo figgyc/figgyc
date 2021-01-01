@@ -1,4 +1,5 @@
 /public/
+.auctex-auto
 .sass-cache
 _site
 content

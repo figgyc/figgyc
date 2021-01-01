@@ -9,7 +9,82 @@
 :END:
 Hello there.
 
-* OpenWRT :@openwrt:
-** TODO How to use OpenWRT on the Creality Wifi Box WB-01
-A while ago, I discovered a cool little gadget called the Creality Box... or is it the Creality Wifi Box? Both of those names are pretty silly to be honest, so I use the model number you can find on the back of the label - the Creality WB-01.
-You might have seen the [[https://www.youtube.com/watch?v=SBr0ArgDztc&t=687s][Teaching Tech video]], or one of the [[https://hackaday.com/2020/12/13/creality-wifi-takes-on-octoprint/][Hackaday]] [[https://hackaday.com/2020/12/28/teardown-creality-wifi-box][articles]]
+* Projects :projects:
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:END:
+** Voter.js :active:
+** Bracketcounter :active:
+** Seedhelper :inactive:
+
+* OpenWrt :openwrt:
+** TODO How to use OpenWrt on the Creality Wifi Box WB-01
+:PROPERTIES:
+:EXPORT_FILE_NAME: openwrt-wb01
+:END:
+A while ago, a friend discovered a cool little gadget on AliExpress called the [[https://www.creality.com/goods-detail/creality-box-3d-printer][Creality Box]]... or is it the [[https://www.creality3dofficial.com/products/creality-wi-fi-box][Creality Wifi Box]]? Both of those names are pretty silly to be honest, so I use the model number you can find on the back of the label - the Creality WB-01.
+
+You might have seen the [[https://www.youtube.com/watch?v=SBr0ArgDztc&t=687s][Teaching Tech video]], or one of the [[https://hackaday.com/2020/12/13/creality-wifi-takes-on-octoprint/][Hackaday]] [[https://hackaday.com/2020/12/28/teardown-creality-wifi-box][articles]] discussing this device, and the general gist of it is that it's a low quality, poorly thought out device. The stock firmware essentially ties your printer to Creality's cloud servers - that is, if it even decides to work with your printer at all, due to the locked down hardware/software restrictions - without any of the advanced functions of solutions like Octoprint, such as no webcam support, or no ability to just print G-code. Of course, if we can run our own software on it, then we can add extra functionality, so that's exactly what I set out to do.
+
+This is the first of a multi part series on my adventures into running [[https://openwrt.org/][OpenWrt]] on this device, the open source firmware that provides a flexible, up to date Linux distribution for many embedded Linux devices. In it I'll set out the easy way to quickly get up and running with OpenWrt on your Creality box, and the three applications that you would probably want to install on it (with varying results). If you're more inclined to hear my process and some of the more technical details, check out the [[/blog/openwrt][OpenWrt]] tag on my blog and read the rest of the series.
+#+hugo: more
+*** The outcome
+With this guide, you'll be able to install OpenWrt on your Creality WB-01, allowing you to use it for whatever you want, really, without having to worry about the device phoning home. Specifically, I go through setting up 3 applications:
+- Octoprint - the most popular choice for remote controlling 3D printers.
+- Klipper - this setup is more complicated, but in a nutshell, it allows you to take advantage of the "computing power" of the WB-01 to pre-process slicing commands into raw stepper commands, allowing you to squeeze some extra speed out of an 8-bit mainboard, or get some new interesting features. There are also many web interfaces for Klipper which, in my opinion, tend to look better than Octoprint does.
+- mjpg-streamer - this tool allows you to plug a real USB webcam (no "3D Viewer" required!) and stream it to your computer, complementing an Octoprint or Klipper-type dashboard. This doesn't necessarily depend on the first two - you could also use your WB-01 to add a camera to a printer controlled by a Pi Zero, which may be sufficient to control the printer but not to also run a camera at the same time.
+Of course there's nothing stopping you from setting up any software in the vast array supported by OpenWrt - though you should read the [[* Custom software]] section first if you intend on doing that.
+*** Prerequisites
+At the bare minimum, you'll need:
+- a Creality WB-01 box. You do not need to set it up in the Creality Cloud app, in fact you don't even need a smartphone, and I would recommend not doing so, in case Creality decide to push a firmware update making loading third-party software more difficult (I have not been made aware of this happening - if it does, let me know!)
+- a microSD card - doesn't need to be particularly large, mine only uses X GB (you might have one in your printer already, but you should probably leave it there to make running Octoprint usable). Pro tip: if you're using a third-party mainboard, you probably already have two of them.
+- some sort of microSD card reader, or an SD reader with an adapter. I use the one that came with my printer and it works.
+- a device capable of formatting an SD card as FAT32, copying files to it, accessing Wi-Fi or Ethernet networks, and connecting with ~ssh~.
+  Obviously a computer is ideal, but theoretically there's nothing stopping you from doing this on a phone, although the lack of phone-based slicers (as far as I am aware) would make it not very worth doing. Windows, macOS and Linux all work fine.
+*** Flashing OpenWrt
+To install OpenWrt on this device, you'll first need to download it. I make my OpenWrt builds available [[https://github.com/figgyc/openwrt/releases][on Github]], and I recommend them because they have been set up to enable the wireless access point by default, and they also include all the tools you'll need to setup extroot (more on that later). You can compile it yourself if you want, more on that in this post (TODO), and eventually I'll push my changes to the official OpenWrt repository, but the official snapshots are not the easiest to work with either, due to the way the package system works. Download the ~tar.bz2~ file and the ~packages.7z~ file.
+
+However you get it, you'll find that the main update file comes in a ~.tar.bz2~ format, *don't extract it!* In fact the printer will extract this itself when we set it up. Rename the file exactly to ~cxsw_update.tar.bz2~, and put it in the root (no folders) of a FAT32-formatted microSD card. Then simply plug in your Creality Box, wait for a few minutes for it to turn on, and put in the microSD card. It should automatically detect it and eventually flash the custom OpenWrt firmware.
+
+Once it's done, start scanning for Wi-Fi networks (or plug it into your computer with an Ethernet cable if it doesn't have Wi-Fi). You should see an open network called ~OpenWrt~ with no password. Log into it and you can begin setting things up!
+*** Setting up the Wi-Fi
+For the first part of the setup, to make things easier we'll configure OpenWrt with the web interface, LuCI. You should be able to find this by typing ~192.168.1.1~ in your browser. If your home router also uses this address, it might not work, in which case you should disconnect from it for now (we'll be fixing that in a bit!). There is no password by default: feel free to set one if you want, although it's not strictly necessary.
+
+The first thing you will want to do is go to Network > Interfaces, and under the LAN interface, press Edit. Then, change the IPv4 address to ~192.168.2.1~ or some other address which is not used by your LAN. Save that, and save and apply the page.
+
+Next, go to Network > Wireless, Enable the interface if it isn't already, press Scan, and select your wireless network to join it (note that the WB-01 only supports 2.4GHz). You should now see three sections: one radio, the OpenWrt SSID and your SSID. Disable the OpenWrt SSID and save again. Now your device is securely connected to the internet over Wi-Fi! TODO: DHCP wireless
+*** Setting up extroot
+At this point you essentially have a mediocre wireless router, and you can run a lot of things on it, but if you want to use it for 3D printer management, you will quickly realise the device has a limitation: 16 megabytes of flash is nowhere near enough! Therefore, we will set up the microSD card to be able to install software and configuration on it, which can obviously be a lot bigger, allowing enough space for Python and other large applications. In OpenWrt, we do this with a process called extroot. You can read more about this on the [[https://openwrt.org/docs/guide-user/additional-software/extroot_configuration][OpenWrt wiki]], but if you're using my image I've installed all the packages for you so you can just run this sequence of commands on the box. To do this, you need to use ~ssh~, which is a tool that allows you to get remote access to a machine through the command line. Windows 10, macOS, and most major Linux distributions include it: you should just type ~ssh root@<ip address>~ on the command prompt or terminal to connect. Then run this sequence of commands, one at a time. *This will delete everything on the microSD card!* Back up anything you care about.
+#+begin_src sh
+DEVICE="$(sed -n -e "/\s\/overlay\s.*$/s///p" /etc/mtab)"
+uci -q delete fstab.rwm
+uci set fstab.rwm="mount"
+uci set fstab.rwm.device="${DEVICE}"
+uci set fstab.rwm.target="/rwm"
+uci commit fstab
+mkfs.ext4 /dev/mmcblk0p1
+DEVICE="/dev/mmcblk0p1"
+eval $(block info "${DEVICE}" | grep -o -e "UUID=\S*")
+uci -q delete fstab.overlay
+uci set fstab.overlay="mount"
+uci set fstab.overlay.uuid="${UUID}"
+uci set fstab.overlay.target="/overlay"
+uci commit fstab
+mount /dev/mmcblk0p1 /mnt
+cp -f -a /overlay/. /mnt
+umount /mnt
+reboot
+#+end_src
+After running this, the box should reboot, and when you get back into LuCI, you should see however many megabytes or gigabytes you have available. Therefore you should now have space to put advanced software on your Creality Box! It's not just software though; the extroot overlay will also store your data such as G-codes.
+*** Installing software
+**** Octoprint
+Octoprint is the most popular 3D printer remote control software, as it works pretty much plug-and-play with the majority of 3D printers using the normal Marlin firmware, including the stock firmware on most printers nowadays.
+**** Klipper
+**** mjpg-streamer
+**** Custom software
+In theory, installing anything you want on OpenWrt should be as easy as searching it up in LuCI's convenient package installer and downloading it there. In fact, if you've ever used a stable OpenWrt version then you will have had this experience. Unfortunately, the WB-01 is not yet supported by a stable version of OpenWrt, it is using the snapshots, and the package situation there is a lot messier. This is why I bundle the ~packages.7z~ collection with my distribution. The problem is that many packages depend on the kernel from where the software gets built being exactly the same as the one you're running, and of course the window in which this will be true is usually less than a day after building it. That means if you went the route of compiling OpenWrt and installing packages from the official snapshot repository, you would basically have to rebase, recompile, reflash, reconfigure, redo extroot, and reinstall everything, every time you wanted to install a new package. As a result, I think if you want to use any additional packages I haven't compiled then you should follow my [[* Compiling OpenWrt for the WB-01: tips and tricks][OpenWrt compilation guide]], compile packages you need as modules, and install them using the ~opk~ files, and avoid downloading from the repository altogether.
+*** Things you should know
+- You can upgrade the firmware in theory, use the ~sysupgrade.bin~ for that, but bear in mind that whenever you do this it will wipe all of your settings (there is a tick box to try and avoid that, but if you're on extroot it probably won't help), so I only recommend doing it if there's a security issue, a bug, or a new feature.
+-
+** TODO Compiling OpenWrt for the WB-01: tips and tricks
+** TODO Secrets of the Creality WB-01
