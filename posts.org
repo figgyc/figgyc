@@ -7,15 +7,33 @@
 :EXPORT_HUGO_SECTION: /
 :EXPORT_FILE_NAME: _index
 :END:
-Hello there.
+Hello there. I'm George, on most of the internet I go by figgyc though. Check out some of my [[/projects][projects]], my [[/blog][blog]], or check my social networks:
+- [[https://github.com/figgyc][GitHub]]
+- [[https://twitter.com/figgyc1][Twitter]]
+If you want to get in touch about a project, I recommend asking on Discord where I'm figgyc#0168, alternatively DM me on Twitter. If it's more serious then [[mailto:inquiries@figgyc.uk][email me]].
 
-* Projects :projects:
+* Projects :@projects:
 :PROPERTIES:
-:EXPORT_HUGO_SECTION: /
+:EXPORT_HUGO_SECTION: projects
+:EXPORT_FILE_NAME: _index
 :END:
 ** Voter.js :active:
+:PROPERTIES:
+:EXPORT_FILE_NAME: voterjs
+:END:
+[[https://voter.figgyc.uk][Voter.js]] is a JavaScript website which is a ranking tool, letting a user order things from best to worst using a human-facing sorting system. It is principally designed for competitive word games.
+#+hugo: more
+Written in vanilla client-side JavaScript, Voter.js is a simple web application designed primarily for the community of the word game [[https://discord.gg/ZWPvFRv][Ten Words of Wisdom]] and spin-offs (although there is nothing stopping it from being used to rank any list of items). Using a simple yet sophisticated interface combined with an optimised merge sort algorithm, it allows the user to rank a list of responses to a game's prompt by simply clicking on which of a pair they deem superior. Especially on large sets of responses, voting of which is encouraged by hosts to improve the accuracy of results, it simplifies and accelerates the process since manually sorting a list requires you to retain a rough idea of all the responses and their positions in your memory which can be quite time consuming.
+
+Usage exceeds 1500 users a week, and it is widely regarded as a useful tool, generally succeeding the original "voter.exe" project by being cross-platform and including more features such as automatic assembly of the final vote keyword (in TWOWs, responses are mapped to letters and an entire vote can be represented by a list of the characters from best to worst). It has been continuously updated with bug fixes and with additional features, such as keyboard shortcuts, grouping similar responses into tiers to save comparison time, and more.
 ** Bracketcounter :active:
-** Seedhelper :inactive:
+:PROPERTIES:
+:EXPORT_FILE_NAME: bracketcounter
+:END:
+[[https://bfb.figgyc.uk][Bracketcounter]] is a data analysis project, gauging public opinions via YouTube comments.
+#+hugo: more
+Using TypeScript and a custom high-performance asynchronous interface to the YouTube API, [[https://bfb.figgyc.uk][Bracketcounter]] counts comments on a YouTube video containing a particular pattern, and presents this in a simple to digest graph format. I designed this to correspond with the video series [[https://bfdi.tv][BFDI]] which is a viewer voted series in which comments determine the outcome of the game. As a result there is a lot of interest in who is eliminated before the release of the next episode so I decided to fill the niche. In fact this has resulted in a boost of engagement to the original videos as knowing of close results encourages more people to voice their opinion. Additionally, I developed a set of [[https://github.com/figgyc/bracketcounter-datastuff][data tools]] in Python to enable interesting analyses, like the relationships of opinions between two videos. Recently, I've made it easier for people creating their own videos to deploy it for their own use, including documentation and adding support for authentication with OAuth to read comments behind moderation filters.
+
 
 * OpenWrt :openwrt:
 ** TODO How to use OpenWrt on the Creality Wifi Box WB-01
@@ -86,5 +104,67 @@ In theory, installing anything you want on OpenWrt should be as easy as searchin
 *** Things you should know
 - You can upgrade the firmware in theory, use the ~sysupgrade.bin~ for that, but bear in mind that whenever you do this it will wipe all of your settings (there is a tick box to try and avoid that, but if you're on extroot it probably won't help), so I only recommend doing it if there's a security issue, a bug, or a new feature.
 -
-** TODO Compiling OpenWrt for the WB-01: tips and tricks
-** TODO Secrets of the Creality WB-01
+** TODO Compiling OpenWrt for the Creality WB-01: tips and tricks
+:PROPERTIES:
+:EXPORT_FILE_NAME: wb01-openwrt-details
+:END:
+
+** TODO Getting into the Creality WB-01: my thought process
+:PROPERTIES:
+:EXPORT_FILE_NAME: wb01-secrets
+:END:
+Recently, I investigated the Creality "Wifi Box" WB-01 and [[* How to use OpenWrt on the Creality Wifi Box WB-01][put OpenWrt on it]]. Along the way, I uncovered a few oddities with the device which I thought would be interesting to share for anyone else interested in it, or embedded development in general. I've also documented my thought process (this was written after the fact but it's pretty much accurate).
+*** The entry point
+I actually started hacking this device before I even bought one. Details on the device online were scarce, and I wanted to ensure that its hardware platform would be hackable, otherwise there wasn't much point. At this point I was speculating on the device even ran Linux at all, and I was concerned by a competing device, the [[https://www.geeetech.com/wiki/index.php/3D_wifi_module][Geeetech 3DWiFi]], which is based on a less flexible STM32+ESP32 based design. (Despite that, if you aren't willing to tinker, it's probably better thought through software wise, although I've never tried one) I thought my best way in would be through decompiling the Creality Cloud Android app, which interfaces with the printer, using apktool, and through searching the strings I found a link to the [[https://file2-cdn.creality.com/model/cfg/android_setting.cg][firmware download location]].
+
+The file format of the device's firmware updates are nonstandard; it is simply a tar file containing a script called ~install.sh~, which is executed with 2 arguments: whether or not the update was called via the IoT application (more on that later) or not, and the directory where the files in the tar were extracted. The other files that Creality uses in their packages are ~bImage~ and ~root_uImage~, which contains the bootloader - yes, they update the bootloader for some reason - and the kernel and root filesystem image respectively. I extracted ~root_uImage~ with [[https://github.com/ReFirmLabs/binwalk][~binwalk~]], a nice tool designed for extracting all kinds of firmware images.
+*** Exploring the filesystem
+[[/images/cxsw-fs.png]]
+
+You probably recognise this - that's right, it's a Linux filesystem! There is a bit of an oddity in ~etc_ro~, which seems to just be where some ~etc~ files are, but nonetheless I had a vague idea of what I should look at first. Starting with ~/home~, this seems to be where most of the binaries are for the IoT application. Unfortunately, these were all compiled, so I couldn't really learn much about that - I think someone else should reverse engineer it at some point, it would not surprise me if it had security issues. In the strings of ~iot-linkkit-solo~ I did see strings relating to MQTT, and URLS for an "aliyun" MQTT server, I think it's talking about [[https://github.com/aliyun/iotkit-embedded/wiki][this SDK from Alibaba Cloud]]. In ~prt_com~ I saw ~Creality~, various model names of Creality printers, ~SOVOL-O2~, which is a bit strange as it isn't Creality, ~Marlin~, and other related strings, which seems to indicate the printer/mainboard lockdown noted by others was intentional. (That said it might not be entirely malicious, the app could just have compatibility issues? No idea really.)
+
+I moved on to ~/etc_ro/lighttpd/www~, which told me that the system is based on a Ralink SDK of some sort. Opening the ~index.html~ file, I recognised the interface from [[https://www.youtube.com/watch?v=FxE2ITDWsNE][a LiveOverflow video]], and while Creality had hilariously commented out the main vulnerability from the menu, the System Command page was still there and could be navigated to manually. As a result, the device was going to pretty much wide open, so I decided to buy one. Of course being that Creality was "launching" this device for the 11/11 super sale (it seems to have existed since September? not really sure what was up with that) and I was ordering from China, I had to wait quite a while for mine to arrive. If you're interested in one, they seem to have popped up locally on eBay by now, probably in part due to the fact that Creality has pushed to bundle them with many printers.
+*** The hardware
+In the meantime, I decided to look into the bootloader of the device. Basically this was just grepping for strings again - I could see that Creality had put the effort into compiling their own U-Boot, but apart from that I just got some part numbers of SPI flash chips, and a model number - ~MT7628~.
+
+Of course, when mine eventually arrived, I immediately set to taking it apart, and while there is no MT7628, there is an MT7688AN chip - as far as I can tell, the MT7688 series is just a revision of the MT7628 and they are for all intents and purposes identical. There is also RAM and the BY25Q128 flash chip, if you want to have a look inside there are teardowns on the Internet. I broke the front panel off mine because I didn't really have a clue what I was doing so it just sort of sits in there now - makes opening it a bit easier I guess :)
+*** Getting in
+When I plugged the device in, at this point I was unsurprised to discover that it shows up as an access point - ~CXSWBox-FCEEE60017D4~ (of course yours will show your MAC address). The device shows up on ~10.10.10.254~ and I had no problems getting in to the system command page. At the time, I had read the startup script and knew telnet wouldn't automatically restarted it, so I just killed it and made a new ~telnetd -L /bin/ash~ to bypass the login prompt. Since then, [[https://hackaday.com/2020/12/28/teardown-creality-wifi-box/#comment-6307265][a mysterious Hackaday user]] cracked the default root password: it's ~cxswprin~, so this step isn't necessary anymore (or until they change it, anyway). Once I had a root shell, my first step was to make a flash backup, generally following [[https://openwrt.org/docs/guide-user/installation/generic.backup][these instructions]] - that came in handy later ;) I should have ran ~ifconfig~ here to check the MAC assignments but I forgot, so I had to do that later when I reflashed the stock firmware. I also did ~cat /proc/mtd~ to check the flash layout. But of course the main thing I wanted to do now was create an OpenWrt image for it and flash it.
+*** OpenWrt
+The OpenWrt project makes it very easy to add support for a new device - you can [[https://github.com/figgyc/openwrt/commit/5c86bb7eca75124cb9a529be613b14d99ab4634f][my commit]] in a few minutes if you want to know all the details, but in effect you just copy a device's dtsi from the same chipset and change a few variables like the MAC location, flash layout, LED assignments, and switch configuration. I got it done in less time than it took to actually run ~make~ and compile the image. You'll probably want to use ~make menuconfig~ to set a few things up, like installing LuCI and the filesystem tools for extroot - check out my blog post about that.
+
+When it was done, I used the ~mtd_write~ binary on the stock firmware to write it. The stock firmware divides the mtd regions of ~Kernel~ and ~RootFS~ so I had to write a little shell script to write to both partitions. Unfortunately the first time I flashed I specified the whole flash region which was a big mistake.
+
+*** Getting in (again)
+Yes, I did the stupid thing: I bricked it. I had overwritten the bootloader and the configuration, so even if serial recovery worked (I haven't actually tried it, but I've heard it's broken) it wouldn't be an option here. Instead I had to reflash the SPI flash chip. Thankfully I had made a backup, so all I had to do was reprogram it.
+
+In my case, I purchased the "CH341A MiniProgrammer" from Amazon, but I would not recommend doing the same. The design sends 5V into the chip instead of 3V, and while I've heard this works, it's probably unhealthy for the chip and the datasheet suggested otherwise, and I didn't want to risk having to wait several more weeks for another box from China, so I got a friend to perform a [[https://www.eevblog.com/forum/repair/ch341a-serial-memory-programmer-power-supply-fix/msg1323872][mod]] which converts it to 3V. Technically this worked, but in my case it was incredibly fragile and my friend had to resolder it several times, and had to dig into the leadframe to get more metal exposed. Might be that my friend is a bad solderer, but either way it doesn't seem to be a particularly good idea. In addition to that, for some reason the way mine was set up, with pin 8 connected the chip would just short and get very hot - it didn't kill the chip but it could have killed me, I burnt my finger on it a few times :P. As a result I had to wire a little proxy cable to disconnect pin 8 from the programmer. What's weird is pin 8 is supposed to be VCC but nonetheless disconnecting it made the flash go flawlessly.
+
+If you have to do it, I would recommend going a [[https://www.flashrom.org/Supported_programmers][different way]]: I've heard good words about FTx232H based solutions, and you could even use a Raspberry Pi you have laying around.
+
+You've probably never heard of BoyaMicro before, and neither have any flashing programs I've seen, including flashrom, but fortunately its open source nature means a contributor called [[https://github.com/flashrom/flashrom/pull/161][cecada]] has added support for this chip. Thanks to them, I could very easily read from the chip, and my backups were consistent so I felt confident to write to the flash chip, and thankfully it worked successfully!
+*** The first flash
+After I got back in, I repeated the setup and flashed OpenWrt successfully. However, for some reason any configuration changes I made did not persist. After looking at the dmesg logs, I figured out it was because spi-nor doesn't recognise the obscure flash chip from before. As a result, I had to reprogram the SPI chip to go back to stock again, and then wrote a [[https://github.com/figgyc/openwrt/blob/wb01/target/linux/generic/pending-5.4/499-mtd-spi-nor-add-support-for-boyamicro-by25q128as.patch][kernel patch]] to add support using the ID from the datasheet. Once I had done that, I was golden! At this point, I was pretty much done - everything else was more about OpenWrt then this device specifically, and I've covered that in my other blog post.
+
+Following are a few miscellaneous oddities I discovered during the process:
+*** The MAC mystery
+This is one of the things about the Creality box where I literally have no idea. Perhaps someone with more familiarity with these chipsets can shine a light on it. When I was configuring the dtb for OpenWrt, I wanted to know where the MAC addresses were so they could be read. I took a look at the flash backup and at 0x40000 it looks like this:
+#+BEGIN_SRC hexdump
+00040000: 2876 0600 fcee e600 17d4 0000 0000 0000  (v..............
+00040010: ffff ffff ffff ffff ffff ffff ffff ffff  ................
+00040020: 0000 0000 2000 0000 fcee e6ff 17d4 fcee  .... ...........
+00040030: e640 1b06 1134 0020 ffff 0001 0000 0000  .@...4. ........
+00040040: 0000 2200 0000 0000 3000 0000 0000 0000  ..".....0.......
+00040050: 8200 0094 40b9 c0ca 1e81 8181 40ca 2080  ....@.......@. .
+00040060: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+...
+#+END_SRC
+There are 3 places which contain the sequence ~fc:ee:e6~, the OUI section of the MAC address ([[https://ouilookup.com/mac/FC-EE-E6][attributed]] to manufacturer Formike Technologies):
+- ~+0x04~ has the MAC address ~fc:ee:e6:00:17:d4~, which is the real MAC address, used on the stock firmware for the Wi-Fi and on the label, SSID and QR code (which is just the SSID and the serial number encoded)
+- ~+0x28~ has ~fc:ee:e6:ff:17:d4~, this variant is used on the Ethernet side of things.
+- ~+0x2e~ has ~fc:ee:e6:40:1b:06~. This one is very strange - despite having an OUI and being some sort of data, I cannot find anywhere where it is actually used. I have no idea why the manufacturer would burn a useless MAC address on every device manufactured. It could also be the same on every device, but I only have one so I have no way to tell.
+
+Speaking of weird device-unique data, the aforementioned serial number in the QR code is nowhere to be found anywhere on the actual device. My guess is that it is only stored on Creality's servers after manufacture as a sort of authentication code, so that a malicious actor can't just register all the MAC addresses onto their account.
+
+*** Firmware updates
+The way the device handles firmware updates is frankly just bizzare to me. First of all, there is no need for the device to trust user input with the install script - why didn't they just have one hardcoded on the device end? Heck, one could consider Creality's own update script untrustworthy, as for some reason, it updates the bootloader of the device which probably significantly increases the brick risk if something goes wrong during the write. Not that the bootloader's recovery functionality works anyway; I never managed to invoke it, but I'm not an expert in U-Boot.
