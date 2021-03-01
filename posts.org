@@ -8,12 +8,13 @@
 :EXPORT_HUGO_SECTION: /
 :EXPORT_FILE_NAME: _index
 :END:
-Hello there. I'm George, on most of the internet I go by figgyc though. Check out some of my [[/projects][projects]], my [[/blog][blog]], or check my social networks:
+Hello there. I'm George, on most of the internet I go by figgyc though. The main purpose of this website is for my blog. I also use this domain to host a few random web projects that you don't need to care about.
+Check my social networks:
 - [[https://github.com/figgyc][GitHub]]
 - [[https://twitter.com/figgyc1][Twitter]]
-If you want to get in touch about a project, I recommend asking on Discord where I'm figgyc#0168, alternatively DM me on Twitter. If it's more serious then [[mailto:inquiries@figgyc.uk][email me]].
+If you want to get in touch, [[mailto:inquiries@figgyc.uk][email me]].
 
-* Projects :@projects:
+* TODO Projects :@projects:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: projects
 :EXPORT_FILE_NAME: _index
@@ -185,3 +186,47 @@ Speaking of weird device-unique data, the aforementioned serial number in the QR
 
 *** Firmware updates
 The way the device handles firmware updates is frankly just bizzare to me. First of all, there is no need for the device to trust user input with the install script - why didn't they just have one hardcoded on the device end? Heck, one could consider Creality's own update script untrustworthy, as for some reason, it updates the bootloader of the device which probably significantly increases the brick risk if something goes wrong during the write. Not that the bootloader's recovery functionality works anyway; I never managed to invoke it, but I'm not an expert in U-Boot.
+
+* Thoughts :thoughts:
+** TODO Parasocial Everything: How Twitter will kill the news, and Substack will die trying
+:PROPERTIES:
+:EXPORT_FILE_NAME: substack-revue-parasocial-journalism
+:END:
+There's been a lot of hubbub on Hacker News recently about how newsletter subscription platforms like Substack, Revue and the like.
+
+This is my prediction of what will happen. It's a prediction, and a pretty wild one - my point of view is nontraditional, pessimistic and mostly informed by my excessive social media consumption :P
+
+*** Parasocial News
+This paragraph can be found on [[https://substack.com/about][Substack's about page]]:
+#+BEGIN_QUOTE
+Readers win, too. By opting into direct relationships with writers, we can be more selective with how we consume information, honing in on the ideas, people, and places we find most meaningful.
+#+END_QUOTE
+In my cruel interpretation, this is basically marketing speak to summarise the selling point of why readers should subscribe to newsletters: it's a monthly fee to access a higher-quality echo chamber with the added bonus of a nice fuzzy feeling that you're personally responsible for your favourite writer's success.
+
+If you're on Twitter, you've probably seen the ridiculous amount of trends about Minecraft YouTubers. The movement, led by [[https://twitter.com/Dream][Dream]] and supported by a cast of like minded content creators, is barely even about Minecraft anymore. They even created a personality, the anonymous "twitter guy", who adds the descriptions to niche hashtags to make them accessible to the wider audience, as a hilarious self-reflection into the fact that
+*** The Thread
+I'm not going to deny that the UX of reading news in 1 or 2 sentence chunks interspersed with profile pictures and reply buttons is a bit subpar. But Revue was never about the newsletters for Twitter.
+
+I think Twitter's real plan with Revue is to create the Super Thread: news/opinion/journalism consumable in app, shareable in pieces at the tap of a button, and with a built in mechanism for discussion (read: argument), helping to drive up that sweet sweet engagement! Payment will fit perfectly in to this model: one of your friends just retweeted a sentence of a cool sounding article? Subscribe to person with loads of followers to read the whole thing! The selling point is never the topic or the person - it's /what they have to say/, and providing a method to propagate this is going to be a superpower.
+
+Of course this will probably be enhanced with some sort of credits system or some sort of Medium-like subscription to pay for everyone's Super Threads in aggregate - if the writers get the personal attachment and they get the money, the paid newsletter is simply an illusion that Revue still is a Substack-level control platform. Social media also solves the signup friction and the discovery issue - "Type your email | Subscribe" will never be as effective as the good old fashioned follow button, and the natural sharing of quotes via the green retweet and the red retweet with people's existing friendship bases is the ideal form of discovery - clicking through is death on Twitter, if you see it then you see it and if you don't then you don't.
+*** Parasocial Everything
+People on the paid newsletter train seem to believe that the best way to create an attachment between a writer and a reader is the monthly billing invoice. I'd bet they're wrong - maybe they're right for some audiences, but the masses can be attached to anything given enough "fake internet point"-fueled dopamine hits, no purchase necessary. The money will be a consequence of the engagement, not the cause. The reality is that the big new product is the "thanks for supporting me", not the content that you support a writer "for". If people willingly [[https://dreambranding.com/collections/coins/products/dream-coin-13-million-subscribers-limited-edition-pre-order?variant=37203036864672][pay Dream 15 dollars for a "limited edition coin"]] (fun fact, every coin listed on Dream's store to date is still on sale. Classic!), then you can bet they'll pay to hear celebrity X or "influential writer" Y's thoughts on the next big political event, the next big startup, or even just opinions on the Future of the World in their favourite flavour. But the article or the coin is not where the value is derived from - it's from the involvement, the social desire to be a part of the Big Group.
+
+Chris Best seems to think that Substack is a replacement for social: if people pay for their content then there will be no need for algorithms, feeds, and a culture for attention. They've taken an approach of pitching to writers: they have the control, they have the website, they choose the subscription. But by doing this, they're essentially leaving their clients to fend for themselves. Building a blog is not easy. There
+
+I also don't think paid content will scale. There's a reason that more people read The Sun than the Financial Times: many people simply do not place a value on their information. In fact, many newsletter writers are already starting to violate the tenant of "no attention" by inserting advertisements into their newsletters: [[https://swapstack.co/][Swapstack]] is an example, but in general it just goes to show that for most writers there is a limitation to the paid content model.
+
+I see paid content as social's greatest weapon: the algorithms, feeds, and the attention culture are the perfect way to get people to give creators money. The money doesn't need to be /for/ the content:
+
+*** No Room on the Rocket
+Substack provides no value. The 5% fee on payments essentially goes towards their maintenance of a CMS and a simple authentication layer connected to Stripe Billing. Any sufficiently large publisher will quickly recognise this and using the portable email list helpfully provided to them, they'll jump ship. Ben Thompson's Stratechery isn't their inspiration, it's literally the entire model. Functionally it's basically just a shrinkage of the selective paywall, already employed on a website-by-website basis by traditional media, but on a "per person" scale.
+
+The only fate I can see them following is to float as-is, making a liveable profit for the founders, as "just another writing platform", in the vein of Blogger, Medium, or WordPress.com. Maybe they will be acquired by Facebook or some other social media platform who want to copy the Super Thread by buying a swarm of writers and providing them with a convenient "publish on X" button, but I find this unlikely - the writers will probably gravitate to other platforms naturally when they begin to desire a larger readership and income, in which case the platform will probably die a slow death.
+
+*** Conclusion
+I don't think this is a future I would want, I think it's the future that we'll end up having. My personal opinion is that if things end up like this then it would be a manipulative dystopia - in effect, it's an illusion, combining the worst of today's social media and hiding it behind the "professionalism" giving a reputation to the journalism of today, where writers are paid to write well, not to write to attract.
+
+The other key takeaway I have is that there is no room for the mainstream media in this future. The whole thing serves as an empowerment to the individual - it would be a world where, for better or for worse, the flow of people is dictated by who has the most agreeable things to say, not who has the biggest, fastest megaphone. The very value of it is derived from the personal interaction in a scalable way - having a brand or a company behind a Super Thread defeats the purpose, and I'm sure they will try, but they will not beat the new way, where everything people consume comes from a person and not from a brand. Some might argue that the purpose of news brands in the present is to build a sense of reputation for unbiased views and not making massive blunders. I agree, but I also think people don't realise how little most people actually care.
+
+For the record, I have no mailing list, banner ads or Patreon. My blog package generates [[/index.xml][an RSS feed]] but I don't know if it works. I'm a 17 year old student and the only reason I write anything is to just put what I think out there in a long form way.
