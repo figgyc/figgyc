@@ -1,0 +1,6 @@
+* George
+Hello there. I'm George, on most of the internet I go by figgyc though. The main purpose of this website is for my blog. I also use this domain to host a few random web projects that you don't need to care about.
+Check my social networks:
+- [[https://github.com/figgyc][GitHub]]
+- [[https://twitter.com/figgyc1][Twitter]]
+If you want to get in touch, [[mailto:inquiries@figgyc.uk][email me]].
