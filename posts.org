@@ -26,7 +26,7 @@ One of the best things about the Web is the freedom to customise it as you wish.
 These files are designed to be used with [[https://github.com/openstyles/stylus#stylus][Stylus]] or another usercss compatible extension.
 
 *** Full Focus for YouTube [[https://raw.githubusercontent.com/figgyc/usercss/main/distractionfreeyt.user.css][📦 Install]]
-[[./preview/distractionfreeyt.png]]
+[[/images/usercss/distractionfreeyt.png]]
 A userstyle to help you avoid wasting time on YouTube. Features:
 - Hides all recommended videos (in the sidebar, the home page, and at the end of videos)
 - Hides Notifications
