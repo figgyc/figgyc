@@ -9,12 +9,35 @@
 :END:
 #+INCLUDE: "./README.org"
 
-* TODO Projects :@projects:
+* Projects :@projects:
 :PROPERTIES:
 :EXPORT_HUGO_SECTION: projects
 :EXPORT_FILE_NAME: _index
 :END:
-** Voter.js :active:
+This will (eventually) be an exhaustive list of just about everything somewhat significant I've ever done. I think it's important to be transparent about what you do, it's helpful to provide a history for people interested in my stuff, and it's also a cool way to self-reflect on what went wrong and what went right. You can read more about my thought process in [[* Document your projects][this blog article]].
+#+hugo: more
+** UserCSS                                                          :active:
+:PROPERTIES:
+:EXPORT_FILE_NAME: usercss
+:END:
+One of the best things about the Web is the freedom to customise it as you wish. Userstyles are a nice way to change websites to work how you want them to, not some advertising-backed megacorp. I've started writing some userstyles to make my life less dependant on the social media dopamine, and I'm sharing them here to make your life better too.
+#+hugo: more
+
+These files are designed to be used with [[https://github.com/openstyles/stylus#stylus][Stylus]] or another usercss compatible extension.
+
+*** Full Focus for YouTube [[https://raw.githubusercontent.com/figgyc/usercss/main/distractionfreeyt.user.css][📦 Install]]
+[[./preview/distractionfreeyt.png]]
+A userstyle to help you avoid wasting time on YouTube. Features:
+- Hides all recommended videos (in the sidebar, the home page, and at the end of videos)
+- Hides Notifications
+- Hides Trending/Explore
+- Hides Autoplay
+- Hides various visual clutter
+- (optional) Hide Subscriptions
+- (optional) Hide the YouTube logo
+- (optional) Enable the Notifications icon to clear notifications without being able to read them (gets rid of the annoying number in the tab titles)
+
+** TODO Voter.js                                                    :active:
 :PROPERTIES:
 :EXPORT_FILE_NAME: voterjs
 :END:
@@ -22,8 +45,8 @@
 #+hugo: more
 Written in vanilla client-side JavaScript, Voter.js is a simple web application designed primarily for the community of the word game [[https://discord.gg/ZWPvFRv][Ten Words of Wisdom]] and spin-offs (although there is nothing stopping it from being used to rank any list of items). Using a simple yet sophisticated interface combined with an optimised merge sort algorithm, it allows the user to rank a list of responses to a game's prompt by simply clicking on which of a pair they deem superior. Especially on large sets of responses, voting of which is encouraged by hosts to improve the accuracy of results, it simplifies and accelerates the process since manually sorting a list requires you to retain a rough idea of all the responses and their positions in your memory which can be quite time consuming.
 
-Usage exceeds 1500 users a week, and it is widely regarded as a useful tool, generally succeeding the original "voter.exe" project by being cross-platform and including more features such as automatic assembly of the final vote keyword (in TWOWs, responses are mapped to letters and an entire vote can be represented by a list of the characters from best to worst). It has been continuously updated with bug fixes and with additional features, such as keyboard shortcuts, grouping similar responses into tiers to save comparison time, and more.
-** Bracketcounter :active:
+It is widely regarded as a useful tool, generally succeeding the original "voter.exe" project by being cross-platform and including more features such as automatic assembly of the final vote keyword (in TWOWs, responses are mapped to letters and an entire vote can be represented by a list of the characters from best to worst). It has been continuously updated with bug fixes and with additional features, such as keyboard shortcuts, grouping similar responses into tiers to save comparison time, and more.
+** TODO Bracketcounter                                              :active:
 :PROPERTIES:
 :EXPORT_FILE_NAME: bracketcounter
 :END:
@@ -181,3 +204,8 @@ Speaking of weird device-unique data, the aforementioned serial number in the QR
 
 *** Firmware updates
 The way the device handles firmware updates is frankly just bizzare to me. First of all, there is no need for the device to trust user input with the install script - why didn't they just have one hardcoded on the device end? Heck, one could consider Creality's own update script untrustworthy, as for some reason, it updates the bootloader of the device which probably significantly increases the brick risk if something goes wrong during the write. Not that the bootloader's recovery functionality works anyway; I never managed to invoke it, but I'm not an expert in U-Boot.
+
+
+* Thoughts :thoughts:
+** DONE Document your projects
+I've had an idea in my head for a while, and now I'm finally going to do it. I'm going to crawl through my internet history and document [[* Projects][every project I've ever done]].

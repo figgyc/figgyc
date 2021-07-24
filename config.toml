@@ -9,6 +9,7 @@ copyright = "© 2020 George Brooke (figgyc)"
 # Generate a nice robots.txt for SEO
 enableRobotsTXT = true
 sectionPagesMenu = "main"
+pluralizelisttitles = false
 
 # Generate "Bearblog"-like URLs !only!, see https://bearblog.dev/.
 disableKinds = ["taxonomy"]
