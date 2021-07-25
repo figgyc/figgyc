@@ -209,3 +209,12 @@ The way the device handles firmware updates is frankly just bizzare to me. First
 * Thoughts :thoughts:
 ** DONE Document your projects
 I've had an idea in my head for a while, and now I'm finally going to do it. I'm going to crawl through my internet history and document [[* Projects][every project I've ever done]].
+
+* Redirect
+:PROPERTIES:
+:EXPORT_HUGO_SECTION: /
+:EXPORT_FILE_NAME: voterjs
+:END:
+#+BEGIN_EXPORT html
+<meta http-equiv="refresh" content="0; url=https://voter.figgyc.uk/">
+#+END_EXPORT
