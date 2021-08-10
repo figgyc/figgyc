@@ -37,6 +37,10 @@ A userstyle to help you avoid wasting time on YouTube. Features:
 - (optional) Hide the YouTube logo
 - (optional) Enable the Notifications icon to clear notifications without being able to read them (gets rid of the annoying number in the tab titles)
 
+*** Full Focus for Wolfram Alpha [[https://raw.githubusercontent.com/figgyc/usercss/main/fullfocuswa.user.css][📦 Install]]
+[[/images/usercss/fullfocuswa.png]]
+A userstyle to remove visual clutter from Wolfram Alpha. Removes basically everything except the search bar and the answers.
+
 ** TODO Voter.js                                                    :active:
 :PROPERTIES:
 :EXPORT_FILE_NAME: voterjs
